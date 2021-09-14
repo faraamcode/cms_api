@@ -1,4 +1,8 @@
 const express = require('express')
 const app = express()
-
-app.listen(8080)
+require('dotenv').config()
+app.use(express.json())
+const database = require('./Db/Connection')
+const heroRoute = require('./Hero/Hero.route')
+app.use(heroRoute)
+app.listen(8080, () => console.log('listen to port 8080'))
