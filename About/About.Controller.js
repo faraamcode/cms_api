@@ -1,23 +1,22 @@
 const express = require('express')
-const HeroModel = require('./Hero.Model')
-const { id } = require('./Hero.Validation')
-const Schema = require('./Hero.Validation')
-exports.getAllHeroes = async (req, res, next) => {
+const AboutModel = require('./About.Model')
+const Schema = require('./About.Validation')
+exports.getAllAbout = async (req, res, next) => {
   try {
-    const HeroData = await HeroModel.findAll()
-    res.status(200).json(HeroData)
+    const AboutData = await AboutModel.findAll()
+    res.status(200).json(AboutData)
   } catch (error) {
     res.status(400).json({ message: 'server error occurred' })
   }
 }
 
-exports.postHeroes = async (req, res, next) => {
+exports.postAbout = async (req, res, next) => {
   try {
     const value = await Schema.validateAsync(req.body)
     try {
-      const savingResponse = await HeroModel.create(value)
+      const savingResponse = await AboutModel.create(value)
       res.status(200).json({
-        message: 'Hero saved successfully',
+        message: 'about saved successfully',
         value: savingResponse.dataValues
       })
     } catch (error) {
@@ -30,34 +29,35 @@ exports.postHeroes = async (req, res, next) => {
   }
 }
 
-exports.updateHero = async (req, res, next) => {
+exports.updateAbout = async (req, res, next) => {
   const id = req.param('id')
-
-  if (id) {
+  console.log(id)
+  if (!id) {
+    res.status(422).json({ message: 'id is required' })
+  } else {
     try {
-      const updateResponse = await HeroModel.update(req.body, {
+      const updateResponse = await AboutModel.update(req.body, {
         where: {
           id
         }
       })
-      if (updateResponse) {
+      console.log(updateResponse)
+      if (updateResponse[0] > 0) {
         res.status(200).json({ message: 'updated successfully' })
       } else {
-        res.status(400).json({ message: 'id  not available' })
+        res.status(400).json({ message: 'update not successful' })
       }
     } catch (error) {
-      res.status(400).json({ message: 'update not successful' })
+      res.status(422).json({ message: 'id not available' })
     }
-  } else {
-    res.status(422).json({ message: 'id is required' })
   }
 }
-exports.deleteHero = async (req, res, next) => {
+exports.deleteAbout = async (req, res, next) => {
   const id = req.param('id')
 
   if (id) {
     try {
-      const deleteResponse = await HeroModel.destroy({
+      const deleteResponse = await AboutModel.destroy({
         where: {
           id
         }
