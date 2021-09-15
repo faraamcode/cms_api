@@ -31,7 +31,6 @@ exports.postAbout = async (req, res, next) => {
 
 exports.updateAbout = async (req, res, next) => {
   const id = req.param('id')
-  console.log(id)
   if (!id) {
     res.status(422).json({ message: 'id is required' })
   } else {
@@ -41,7 +40,6 @@ exports.updateAbout = async (req, res, next) => {
           id
         }
       })
-      console.log(updateResponse)
       if (updateResponse[0] > 0) {
         res.status(200).json({ message: 'updated successfully' })
       } else {
