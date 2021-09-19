@@ -12,6 +12,7 @@ const EventsRoute = require('./Events/Event.route')
 const GalleryRoute = require('./Gallery/Gallery.route')
 const MissionRoute = require('./Mission/Mission.route')
 const NewsRoute = require('./News/News.route')
+const StudentPerspectiveRoute = require('./StudentsPerspectives/Student.route')
 app.use(
   heroRoute,
   admissionRoute,
@@ -21,6 +22,7 @@ app.use(
   aboutRoute,
   GalleryRoute,
   MissionRoute,
-  NewsRoute
+  NewsRoute,
+  StudentPerspectiveRoute
 )
 app.listen(8080, () => console.log('listen to port 8080'))
