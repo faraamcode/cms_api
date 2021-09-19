@@ -8,6 +8,13 @@ const calendarRoute = require('./Calendar/Calendar.route')
 const aboutRoute = require('./About/About.route')
 const admissionRoute = require('./Admission/Admission.route')
 const contactsRoute = require('./Contacts/Contact.route')
-app.use(heroRoute, admissionRoute, calendarRoute, contactsRoute)
-app.use(aboutRoute)
+const EventsRoute = require('./Events/Event.route')
+app.use(
+  heroRoute,
+  admissionRoute,
+  calendarRoute,
+  contactsRoute,
+  EventsRoute,
+  aboutRoute
+)
 app.listen(8080, () => console.log('listen to port 8080'))
