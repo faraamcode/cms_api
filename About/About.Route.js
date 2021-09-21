@@ -7,6 +7,15 @@ const {
 } = require('./About.Controller')
 
 const router = express.Router()
+/**
+ * @swagger
+ * /about:
+ *  get:
+ *    description: use to request all customers
+ *    responses :
+ *       '200' :
+ *        description: A successful response
+ */
 
 router.get('/about', getAllAbout)
 router.post('/about', postAbout)
