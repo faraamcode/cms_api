@@ -14,4 +14,10 @@ const Schema = Joi.object({
   image_url: Joi.string().required()
 }).with('user_password', 'user_repeat_password')
 
-module.exports = Schema
+exports.loginValidation = Joi.object({
+  user_email: Joi.string()
+    .email()
+    .required(),
+  user_password: Joi.required()
+})
+// module.exports = Schema

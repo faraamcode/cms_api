@@ -1,6 +1,7 @@
 const express = require('express')
 const UserModel = require('./User.Model')
 const Schema = require('./User.Validation')
+const { loginValidation } = require('./User.Validation')
 const bcryptjs = require('bcryptjs')
 exports.getAllUsers = async (req, res, next) => {
   try {
@@ -8,6 +9,43 @@ exports.getAllUsers = async (req, res, next) => {
     res.status(200).json(userData)
   } catch (error) {
     res.status(400).json({ message: 'server error occurred' })
+  }
+}
+exports.userLogin = async (req, res, next) => {
+  try {
+    const value = await loginValidation.validateAsync(req.body)
+    try {
+      const { user_email, user_password } = value
+      const userData = await UserModel.findOne({
+        where: {
+          user_email
+        }
+      })
+      if (!userData) {
+        res.status(401).json({
+          message: 'user not found or incorrect email'
+        })
+      }
+      const checkUser = await bcryptjs.compare(
+        user_password,
+        userData.dataValues['user_password']
+      )
+      if (!checkUser) {
+        res.status(401).json({
+          message: 'invalid password'
+        })
+      }
+      res.status(200).json({
+        message: 'login successfully'
+      })
+    } catch (error) {
+      console.log(error)
+      res.status(400).json({ message: 'server error occurred' })
+    }
+  } catch (error) {
+    const { message, path } = error.details[0]
+    const errorValue = { [path]: message }
+    res.status(422).json(errorValue)
   }
 }
 
