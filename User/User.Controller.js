@@ -1,7 +1,9 @@
 const express = require('express')
 const UserModel = require('./User.Model')
+const jwt = require('jsonwebtoken')
 const Schema = require('./User.Validation')
 const { loginValidation } = require('./User.Validation')
+const { createUserValidation } = require('./User.Validation')
 const bcryptjs = require('bcryptjs')
 exports.getAllUsers = async (req, res, next) => {
   try {
@@ -14,6 +16,7 @@ exports.getAllUsers = async (req, res, next) => {
 exports.userLogin = async (req, res, next) => {
   try {
     const value = await loginValidation.validateAsync(req.body)
+
     try {
       const { user_email, user_password } = value
       const userData = await UserModel.findOne({
@@ -21,23 +24,51 @@ exports.userLogin = async (req, res, next) => {
           user_email
         }
       })
+
       if (!userData) {
         res.status(401).json({
           message: 'user not found or incorrect email'
         })
       }
-      const checkUser = await bcryptjs.compare(
-        user_password,
-        userData.dataValues['user_password']
-      )
-      if (!checkUser) {
-        res.status(401).json({
-          message: 'invalid password'
+
+      try {
+        const checkUser = await bcryptjs.compare(
+          user_password,
+          userData.dataValues['user_password']
+        )
+
+        if (!checkUser) {
+          res.status(401).json({
+            message: 'invalid password'
+          })
+        }
+        const userPayload = {
+          email: userData['user_email'],
+          role: userData['user_role']
+        }
+
+        const token = jwt.sign(userPayload, process.env.PUB_KEY)
+        console.log('token')
+        console.log(process.env.PUB_KEY)
+
+        const verify = jwt.verify(
+          token,
+          process.env.PRIV_KEY,
+          (err, payload) => {
+            if (err) {
+              console.log(err)
+            }
+            console.log(payload)
+          }
+        )
+
+        res.status(200).json({
+          message: 'login successfully',
+          token
         })
+      } catch (error) {
+        res.status(400).json({ message: 'server error occurred' })
       }
-      res.status(200).json({
-        message: 'login successfully'
-      })
     } catch (error) {
       console.log(error)
       res.status(400).json({ message: 'server error occurred' })
@@ -51,7 +82,7 @@ exports.userLogin = async (req, res, next) => {
 
 exports.createUser = async (req, res, next) => {
   try {
-    const value = await Schema.validateAsync(req.body)
+    const value = await createUserValidation.validateAsync(req.body)
     const { user_password } = value
     const hashedPassword = await bcryptjs.hash(user_password, 10)
     const userData = { ...value, user_password: hashedPassword }

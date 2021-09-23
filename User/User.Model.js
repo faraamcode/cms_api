@@ -13,6 +13,7 @@ const userModel = database.define('user', {
   user_gender: DataTypes.STRING,
   user_password: DataTypes.STRING,
   user_token: DataTypes.STRING,
+  user_role: DataTypes.STRING,
   image_url: DataTypes.STRING
 })
 

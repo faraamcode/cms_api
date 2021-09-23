@@ -1,5 +1,5 @@
 const Joi = require('joi')
-const Schema = Joi.object({
+exports.createUserValidation = Joi.object({
   user_surname: Joi.string()
     .required()
     .min(4),
@@ -11,6 +11,7 @@ const Schema = Joi.object({
   user_password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
   user_repeat_password: Joi.ref('user_password'),
   user_token: Joi.string().required(),
+  user_role: Joi.string().required(),
   image_url: Joi.string().required()
 }).with('user_password', 'user_repeat_password')
 
