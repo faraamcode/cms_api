@@ -5,6 +5,19 @@ const Schema = require('./User.Validation')
 const { loginValidation } = require('./User.Validation')
 const { createUserValidation } = require('./User.Validation')
 const bcryptjs = require('bcryptjs')
+exports.getUserProfile = async (req, res, next) => {
+  const userEmail = req.user.email
+  try {
+    const userData = await UserModel.findOne({
+      where: {
+        user_email: userEmail
+      }
+    })
+    res.status(200).json(userData)
+  } catch (error) {
+    res.status(400).json({ message: 'server error occurred' })
+  }
+}
 exports.getAllUsers = async (req, res, next) => {
   try {
     const userData = await UserModel.findAll()
@@ -46,26 +59,24 @@ exports.userLogin = async (req, res, next) => {
           email: userData['user_email'],
           role: userData['user_role']
         }
-
-        const token = jwt.sign(userPayload, process.env.PUB_KEY)
-        console.log('token')
-        console.log(process.env.PUB_KEY)
-
-        const verify = jwt.verify(
-          token,
-          process.env.PRIV_KEY,
-          (err, payload) => {
-            if (err) {
-              console.log(err)
-            }
-            console.log(payload)
-          }
-        )
-
-        res.status(200).json({
-          message: 'login successfully',
-          token
+        jwt.sign(userPayload, process.env.PRIV_KEY, (err, token) => {
+          console.log(err)
+          res.status(200).json({
+            message: 'login successfully',
+            token
+          })
         })
+
+        // const verify = jwt.verify(
+        //   token,
+        //   process.env.PRIV_KEY,
+        //   (err, payload) => {
+        //     if (err) {
+        //       console.log(err)
+        //     }
+        //     console.log(payload)
+        //   }
+        // )
       } catch (error) {
         res.status(400).json({ message: 'server error occurred' })
       }

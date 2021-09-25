@@ -1,5 +1,11 @@
 const express = require('express')
-const { createUser, getAllUsers, userLogin } = require('./User.Controller')
+const { verifyUser, verifyAdmin } = require('../MIddlewares')
+const {
+  createUser,
+  getAllUsers,
+  userLogin,
+  getUserProfile
+} = require('./User.Controller')
 
 const router = express.Router()
 /**
@@ -12,9 +18,11 @@ const router = express.Router()
  *        description: A successful response
  */
 
-router.get('/user', getAllUsers)
-router.post('/user', createUser)
+router.get('/user/profile', verifyUser, getUserProfile)
+router.get('/user', verifyAdmin, getAllUsers)
+router.post('/user', verifyAdmin, createUser)
 router.post('/login', userLogin)
 // router.patch('/about/update/:id', updateAbout)
+// router.get('/user/profile/update', verifyUser, getAllUsers)
 // router.delete('/about/delete/:id', deleteAbout)
 module.exports = router
