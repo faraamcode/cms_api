@@ -1,4 +1,5 @@
 const express = require('express')
+const { verifyUser, verifyAdmin } = require('../MIddlewares')
 const {
   getAllAdmission,
   postAdmission,
@@ -8,8 +9,8 @@ const {
 
 const router = express.Router()
 
-router.get('/admission', getAllAdmission)
-router.post('/admission', postAdmission)
-router.patch('/admission/update/:id', updateAdmission)
-router.delete('/admission/delete/:id', deleteAdmission)
+router.get('/admission', verifyUser, getAllAdmission)
+router.post('/admission', verifyUser, postAdmission)
+router.patch('/admission/update/:id', verifyUser, updateAdmission)
+router.delete('/admission/delete/:id', verifyAdmin, deleteAdmission)
 module.exports = router

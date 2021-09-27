@@ -1,4 +1,5 @@
 const express = require('express')
+const { verifyUser, verifyAdmin } = require('../MIddlewares')
 const {
   getAllContact,
   postContact,
@@ -8,8 +9,8 @@ const {
 
 const router = express.Router()
 
-router.get('/Contact', getAllContact)
-router.post('/Contact', postContact)
-router.patch('/Contact/update/:id', updateContact)
-router.delete('/Contact/delete/:id', deleteContact)
+router.get('/Contact', verifyUser, getAllContact)
+router.post('/Contact', verifyUser, postContact)
+router.patch('/Contact/update/:id', verifyUser, updateContact)
+router.delete('/Contact/delete/:id', verifyAdmin, deleteContact)
 module.exports = router

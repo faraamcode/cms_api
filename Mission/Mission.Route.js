@@ -1,4 +1,5 @@
 const express = require('express')
+const { verifyUser, verifyAdmin } = require('../MIddlewares')
 const {
   getAllMission,
   postMission,
@@ -8,8 +9,8 @@ const {
 
 const router = express.Router()
 
-router.get('/Mission', getAllMission)
-router.post('/Mission', postMission)
-router.patch('/Mission/update/:id', updateMission)
-router.delete('/Mission/delete/:id', deleteMission)
+router.get('/Mission', verifyUser, getAllMission)
+router.post('/Mission', verifyAdmin, postMission)
+router.patch('/Mission/update/:id', verifyAdmin, updateMission)
+router.delete('/Mission/delete/:id', verifyAdmin, deleteMission)
 module.exports = router

@@ -4,7 +4,8 @@ const {
   createUser,
   getAllUsers,
   userLogin,
-  getUserProfile
+  getUserProfile,
+  changePasswordRequest
 } = require('./User.Controller')
 
 const router = express.Router()
@@ -21,8 +22,8 @@ const router = express.Router()
 router.get('/user/profile', verifyUser, getUserProfile)
 router.get('/user', verifyAdmin, getAllUsers)
 router.post('/user', verifyAdmin, createUser)
-router.post('/login', userLogin)
-// router.patch('/about/update/:id', updateAbout)
+router.post('/user/login', userLogin)
+router.post('/user/password/reset', changePasswordRequest)
 // router.get('/user/profile/update', verifyUser, getAllUsers)
 // router.delete('/about/delete/:id', deleteAbout)
 module.exports = router

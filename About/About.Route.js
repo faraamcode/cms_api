@@ -1,4 +1,5 @@
 const express = require('express')
+const { verifyUser, verifyAdmin } = require('../MIddlewares')
 const {
   getAllAbout,
   postAbout,
@@ -17,8 +18,8 @@ const router = express.Router()
  *        description: A successful response
  */
 
-router.get('/about', getAllAbout)
-router.post('/about', postAbout)
-router.patch('/about/update/:id', updateAbout)
-router.delete('/about/delete/:id', deleteAbout)
+router.get('/about', verifyUser, getAllAbout)
+router.post('/about', verifyUser, postAbout)
+router.patch('/about/update/:id', verifyUser, updateAbout)
+router.delete('/about/delete/:id', verifyAdmin, deleteAbout)
 module.exports = router

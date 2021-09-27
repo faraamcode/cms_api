@@ -1,4 +1,5 @@
 const express = require('express')
+const { verifyUser, verifyAdmin } = require('../MIddlewares')
 const {
   getAllEvent,
   postEvent,
@@ -8,8 +9,8 @@ const {
 
 const router = express.Router()
 
-router.get('/Event', getAllEvent)
-router.post('/Event', postEvent)
-router.patch('/Event/update/:id', updateEvent)
-router.delete('/Event/delete/:id', deleteEvent)
+router.get('/Event', verifyUser, getAllEvent)
+router.post('/Event', verifyUser, postEvent)
+router.patch('/Event/update/:id', verifyUser, updateEvent)
+router.delete('/Event/delete/:id', verifyAdmin, deleteEvent)
 module.exports = router
