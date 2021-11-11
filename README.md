@@ -11,7 +11,7 @@ npm install
 
 ### Documentation
 
- Follow the [documentation here]()
+ Follow the [documentation here](https://documenter.getpostman.com/view/14122612/UUy4c5fZ)
  
  ### Frontend 
 The frontend of this API is develop with REACTJS [click here](https://github.com/faraamcode/management_admin_frontend)
